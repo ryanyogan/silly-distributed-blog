@@ -16,15 +16,23 @@ app.post("/events", (req, res) => {
   axios
     .post("http://posts-cluster-ip-srv:4000/events", event)
     .catch((err) => console.error(err.message));
+
+  console.log("Sent Event to posts", event);
+
   axios
     .post("http://comments-cluster-ip-srv:4001/events", event)
     .catch((err) => console.error(err.message));
+  console.log("Sent Event to comments", event);
+
   axios
     .post("http://query-cluster-ip-srv:4002/events", event)
     .catch((err) => console.error(err.message));
+  console.log("Sent Event to query", event);
+
   axios
     .post("http://moderation-cluster-ip-srv:4003/events", event)
     .catch((err) => console.error(err.message));
+  console.log("Sent Event to moderation", event);
 
   res.send({ status: "OK" });
 });

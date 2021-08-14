@@ -19,16 +19,16 @@ const handleEvent = (type, data) => {
     const { id, content, postId, status } = data;
 
     const post = posts[postId];
-    if (post.comments) {
-      post.comments.push({ id, content, status });
-    }
+    post.comments.push({ id, content, status });
   }
 
   if (type === "CommentUpdated") {
     const { id, content, postId, status } = data;
 
-    const comments = posts[postId].comments;
-    const comment = comments.find((comment) => comment.id === id);
+    const post = posts[postId];
+    const comment = post.comments.find((comment) => {
+      return comment.id === id;
+    });
 
     comment.status = status;
     comment.content = content;
@@ -44,20 +44,20 @@ app.post("/events", (req, res) => {
 
   handleEvent(type, data);
 
-  res.send({ status: "Ok" });
+  res.send({});
 });
 
 app.listen(4002, async () => {
-  console.log("http://localhost:4002");
-
+  console.log("Listening on 4002");
   try {
     const res = await axios.get("http://event-bus-srv:4005/events");
 
-    for (const event of res.data) {
-      console.log(`Processing event: ${event.type}`);
+    for (let event of res.data) {
+      console.log("Processing event:", event.type);
+
       handleEvent(event.type, event.data);
     }
   } catch (error) {
-    console.error(error);
+    console.log(error.message);
   }
 });
