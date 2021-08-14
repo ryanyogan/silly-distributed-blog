@@ -7,7 +7,7 @@ export const App = () => {
   return (
     <div className="container">
       <div className="app">
-        <h1>Create Post</h1>
+        <h1>Create Post!!!</h1>
         <div className="app-section">
           <PostCreate />
         </div>
